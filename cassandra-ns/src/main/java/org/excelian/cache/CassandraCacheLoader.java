@@ -1,9 +1,6 @@
 package org.excelian.cache;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Metadata;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Session;
+import com.datastax.driver.core.*;
 import org.springframework.data.cassandra.core.CassandraOperations;
 import org.springframework.data.cassandra.core.CassandraTemplate;
 import org.springframework.data.cassandra.mapping.*;
@@ -17,8 +14,10 @@ import java.util.stream.Collectors;
  * CacheLoader to bind Cassandra API onto the GuavaCache
  *
  * Created by neil.avery on 29/05/2015.
+ * @TODO: Replication class and factor needs to be configurable.
  */
 public class CassandraCacheLoader<K,V> extends AbstractCacheLoader<K,V> {
+
 
     private static final int REPLICATION_FACTOR = 1;
     private static final String REPLICATION_CLASS = "SimpleStrategy";
@@ -35,6 +34,7 @@ public class CassandraCacheLoader<K,V> extends AbstractCacheLoader<K,V> {
 
     public CassandraCacheLoader(Class<V> clazz, Cluster cluster, boolean isSchemaCreate, String keySpace) {
         this.cluster = cluster;
+        this.cluster.getConfiguration().getQueryOptions().setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
         this.isSchemaCreate = isSchemaCreate;
         this.keySpace = keySpace.replace("-","_");
         this.clazz = clazz;
