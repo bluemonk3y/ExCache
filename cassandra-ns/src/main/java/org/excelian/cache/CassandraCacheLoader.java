@@ -14,9 +14,9 @@ import java.util.*;
  * CacheLoader to bind Cassandra API onto the GuavaCache
  *
  * Created by neil.avery on 29/05/2015.
- * TODO: Replication class and factor need to be configurable.
+ * @TODO: Replication class and factor need to be configurable.
  */
-public class CassandraCacheLoader<K,V> extends AbstractCacheLoader<K,V> {
+public class CassandraCacheLoader<K,V> extends AbstractCacheLoader<K,V, Session> {
 
     private static final int REPLICATION_FACTOR = 1;
     private static final String REPLICATION_CLASS = "SimpleStrategy";
@@ -38,14 +38,12 @@ public class CassandraCacheLoader<K,V> extends AbstractCacheLoader<K,V> {
         this.clazz = clazz;
     }
 
-    public CassandraCacheLoader() {
-    }
-
     public void create(String name, K k) {
         if (isSchemaCreate && session == null) {
             synchronized (this) {
                 if (isSchemaCreate && session == null) {
                     try {
+                        isSchemaCreate = false;
                         session = cluster.connect();
                         createKeySpace();
                         createTable();
@@ -53,7 +51,6 @@ public class CassandraCacheLoader<K,V> extends AbstractCacheLoader<K,V> {
                         System.err.println("Keyspace:" + keySpace);
                         t.printStackTrace();
                         System.err.println("Failed to create:" + t.getMessage());
-                        isSchemaCreate = false;
                     }
                 }
             }
@@ -89,6 +86,22 @@ public class CassandraCacheLoader<K,V> extends AbstractCacheLoader<K,V> {
     public V load(K key) throws Exception {
         Object o = ops().selectOneById(clazz, key);
         return (V) o;
+    }
+
+    @Override
+    public void close() {
+        if (session != null && !session.isClosed()) session.close();;
+    }
+
+    @Override
+    public String getName() {
+        return clazz.getSimpleName();
+    }
+
+    @Override
+    public Session getDriverSession() {
+        if (session == null) throw  new IllegalStateException("Session has not been created - read/write to cache first");
+        return session;
     }
 
     private CassandraOperations ops() {

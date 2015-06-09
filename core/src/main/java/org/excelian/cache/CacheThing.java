@@ -7,24 +7,19 @@ import java.util.concurrent.ExecutionException;
 
 public class CacheThing<K,V> implements ExCache<K,V>  {
 
-    final private String name;
-
     private ForwardingCache<K, V> fwdCache;
-    private AbstractCacheLoader cacheHook;
+    private AbstractCacheLoader cacheLoader;
 
     private String spec = "maximumSize=10000,weakKeys,softValues,expireAfterWrite=1d,expireAfterAccess=1d,recordStats";
 
     private LoadingCache<K, V> cache;
     private volatile boolean created;
 
-    public CacheThing(String name, final AbstractCacheLoader cacheHook, String ... optionalSpec) {
-
-
-        this.name = name;
-        this.cacheHook = cacheHook;
+    public CacheThing(final AbstractCacheLoader cacheLoader, String... optionalSpec) {
+        this.cacheLoader = cacheLoader;
         if (optionalSpec != null && optionalSpec.length > 0) this.spec = optionalSpec[0];
 
-        bindToGuavaCache(cacheHook);
+        bindToGuavaCache(cacheLoader);
     }
 
     private void bindToGuavaCache(AbstractCacheLoader cacheHook) {
@@ -52,21 +47,21 @@ public class CacheThing<K,V> implements ExCache<K,V>  {
 
     @Override
     public String getName() {
-        return name;
+        return cacheLoader.getName();
     }
 
     @Override
     public V get(final K k) throws ExecutionException {
         createMaybe(k);
         // a bit crappy - but the fwdrCache doesnt expose 'getOrLoad(K, Loader)'
-        return cache.get(k);
+        return cache.getIfPresent(k);
     }
 
     @Override
     public void put(K k, V v) {
         createMaybe(k);
         fwdCache.put(k, v);
-        cacheHook.put(k, v);
+        cacheLoader.put(k, v);
     }
     @Override
     public void remove(K k) {
@@ -82,11 +77,20 @@ public class CacheThing<K,V> implements ExCache<K,V>  {
         if (!created) {
             synchronized (this) {
                 if (!created) {
-                    cacheHook.create(name, k);
+                    cacheLoader.create(cacheLoader.getName(), k);
                     created = true;
                 }
             }
         }
     }
 
+    @Override
+    public void close() {
+        cacheLoader.close();
+    }
+
+    @Override
+    public AbstractCacheLoader getCacheLoader() {
+        return cacheLoader;
+    }
 }

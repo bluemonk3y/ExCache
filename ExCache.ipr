@@ -187,9 +187,10 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ExCacheSpike1.iml" filepath="$PROJECT_DIR$/ExCacheSpike1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ExCache.iml" filepath="$PROJECT_DIR$/ExCache.iml" />
       <module fileurl="file://$PROJECT_DIR$/cassandra-ns/cassandra-ns.iml" filepath="$PROJECT_DIR$/cassandra-ns/cassandra-ns.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mongo-ns/mongo-ns.iml" filepath="$PROJECT_DIR$/mongo-ns/mongo-ns.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">

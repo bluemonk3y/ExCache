@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 public class CacheThingTest {
 
-    private AbstractCacheLoader<String, String> fixture;
+    private AbstractCacheLoader<String, String, String> fixture;
     private int created;
     private int read;
     private int removed;
@@ -19,7 +19,7 @@ public class CacheThingTest {
 
     @Test
     public void canCreate() throws ExecutionException {
-        CacheThing<String, String> cacheThing = new CacheThing<String, String>("test-cache", fixture);
+        CacheThing<String, String> cacheThing = new CacheThing<String, String>(fixture);
         String test = cacheThing.get("TEST1");
         test = cacheThing.get("TEST2");
         assertEquals(1, created);
@@ -28,7 +28,7 @@ public class CacheThingTest {
 
     @Test
     public void canReadThrough() throws ExecutionException {
-        CacheThing<String, String> cacheThing = new CacheThing<String, String>("test-cache", fixture);
+        CacheThing<String, String> cacheThing = new CacheThing<String, String>(fixture);
 
         String test = cacheThing.get("TEST");
         assertEquals(1, read);
@@ -38,7 +38,7 @@ public class CacheThingTest {
 
     @Test
     public void canWriteThrough() throws ExecutionException {
-        CacheThing<String, String> cacheThing = new CacheThing<String, String>("test-cache", fixture);
+        CacheThing<String, String> cacheThing = new CacheThing<String, String>(fixture);
 
         cacheThing.put("TEST","VALUE");
         assertEquals(1, put);
@@ -46,7 +46,7 @@ public class CacheThingTest {
     }
     @Test
     public void canRemove() throws ExecutionException {
-        CacheThing<String, String> cacheThing = new CacheThing<String, String>("test-cache", fixture);
+        CacheThing<String, String> cacheThing = new CacheThing<String, String>(fixture);
 
         cacheThing.put("TEST", "VALUE");
         cacheThing.remove("TEST");
@@ -55,11 +55,13 @@ public class CacheThingTest {
     }
     @Before
     public void setUp() throws Exception {
-        fixture = new AbstractCacheLoader<String, String>() {
+        fixture = new AbstractCacheLoader<String, String, String>() {
             public String load(String key) throws Exception {
                 read++;
                 return "FIXTURE:loaded_" + key;
             }
+
+            public void close() {}
             public void create(String name, String s) {
                 created++;
             }
@@ -69,6 +71,8 @@ public class CacheThingTest {
             public void remove(String s) {
                 removed++;
             }
+            public String getName() { return "myCache"; }
+            public String getDriverSession() {  return "yay"; }
         };
     }
 }

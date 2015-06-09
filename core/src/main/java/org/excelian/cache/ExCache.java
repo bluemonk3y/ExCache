@@ -1,5 +1,7 @@
 package org.excelian.cache;
 
+import com.google.common.cache.CacheLoader;
+
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -15,4 +17,8 @@ public interface ExCache<K,V> {
     void remove(K k);
 
     void invalidate();
+
+    void close();
+
+    AbstractCacheLoader getCacheLoader();
 }
