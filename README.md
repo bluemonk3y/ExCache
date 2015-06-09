@@ -6,7 +6,7 @@ A extensible near-cache solution that combines eventing with pluggable NoSQL bac
 - ORM Modelling for POJO's using Spring data
 - Eventing and invalidation between various client-side caches (*) (Kafka, Rabbit etc)
 - JSON support (*)
-- eventual support for continuous query cache by leveraging cache-events and implicit query support (*)
+- Eventual support for continuous query cache by leveraging cache-events and implicit query support (*)
 
 \* coming soon ;)
 
