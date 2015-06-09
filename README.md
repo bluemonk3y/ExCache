@@ -22,7 +22,7 @@ A extensible near-cache solution that combines eventing with pluggable NoSQL bac
 - Couchbase
 
 ## Getting started:
-- Take a look at the integration tests for each data platform
+- Take a look at the integration tests for each data platform (mongodb shown below)
 
 ```
  @Document
