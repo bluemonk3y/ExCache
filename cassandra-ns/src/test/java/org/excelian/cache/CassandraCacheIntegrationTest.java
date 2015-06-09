@@ -110,20 +110,6 @@ public class CassandraCacheIntegrationTest {
         }
     }
 
-    @Test
-    public void testPutComposite() throws Exception {
-
-        CacheThing<CompositeKey, TestEntityWithCompositeKey> compCache = new CacheThing<CompositeKey, TestEntityWithCompositeKey>(
-                new CassandraCacheLoader<String,TestEntityWithCompositeKey>(TestEntityWithCompositeKey.class, cluster, true, keySpace));
-
-        TestEntityWithCompositeKey value = new TestEntityWithCompositeKey("neil", "mac", "explorer");
-        compCache.put(value.compositeKey, value);
-
-        TestEntityWithCompositeKey testValue = compCache.get(value.compositeKey);
-        assertEquals("neil", testValue.compositeKey.personId);
-
-        compCache.close();
-    }
 
     @PrimaryKeyClass
     public static class CompositeKey implements Serializable {
@@ -145,5 +131,20 @@ public class CassandraCacheIntegrationTest {
 
         @PrimaryKeyColumn(ordinal = 2, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.ASCENDING)
         private String application;
+    }
+
+    @Test
+    public void testPutComposite() throws Exception {
+
+        CacheThing<CompositeKey, TestEntityWithCompositeKey> compCache = new CacheThing<CompositeKey, TestEntityWithCompositeKey>(
+                new CassandraCacheLoader<String,TestEntityWithCompositeKey>(TestEntityWithCompositeKey.class, cluster, true, keySpace));
+
+        TestEntityWithCompositeKey value = new TestEntityWithCompositeKey("neil", "mac", "explorer");
+        compCache.put(value.compositeKey, value);
+
+        TestEntityWithCompositeKey testValue = compCache.get(value.compositeKey);
+        assertEquals("neil", testValue.compositeKey.personId);
+
+        compCache.close();
     }
 }
