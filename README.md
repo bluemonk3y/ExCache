@@ -2,7 +2,7 @@
 A extensible near-cache solution that combines eventing with pluggable NoSQL backends.
 
 ## Features:
-- Nearside caching for common NoSQL platforms. 
+- Nearside caching for common NoSQL platforms using Google's Guava Cache. 
 - ORM Modelling for POJO's using Spring data
 - Eventing and invalidation between various client-side caches (*) (Kafka, Rabbit etc)
 - JSON support (*)
