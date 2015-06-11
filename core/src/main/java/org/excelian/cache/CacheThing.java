@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutionException;
 public class CacheThing<K,V> implements ExCache<K,V>  {
 
     private ForwardingCache<K, V> fwdCache;
-    private ExCacheLoader cacheLoader;
+    final private ExCacheLoader cacheLoader;
 
     private String spec = "maximumSize=10000,weakKeys,softValues,expireAfterWrite=1d,expireAfterAccess=1d,recordStats";
 

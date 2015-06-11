@@ -14,21 +14,21 @@ import java.util.*;
  * CacheLoader to bind Cassandra API onto the GuavaCache
  *
  * Created by neil.avery on 29/05/2015.
- * @TODO: Replication class and factor need to be configurable.
+ * @implNote : Replication class and factor need to be configurable.
  */
 public class CassandraCacheLoader<K,V> extends AbstractCacheLoader<K,V, Session> {
 
     private static final int REPLICATION_FACTOR = 1;
     private static final String REPLICATION_CLASS = "SimpleStrategy";
 
-    private Cluster cluster;
+    final private Cluster cluster;
     private Session session;
     private boolean isSchemaCreate;
-    private String keySpace;
+    final private String keySpace;
 
     private boolean isTableCreated = false;
 
-    private Class<V> clazz;
+    final private Class<V> clazz;
 
     public CassandraCacheLoader(Class<V> clazz, Cluster cluster, boolean isSchemaCreate, String keySpace) {
         this.cluster = cluster;
@@ -90,7 +90,7 @@ public class CassandraCacheLoader<K,V> extends AbstractCacheLoader<K,V, Session>
 
     @Override
     public void close() {
-        if (session != null && !session.isClosed()) session.close();;
+        if (session != null && !session.isClosed()) session.close();
     }
 
     @Override
