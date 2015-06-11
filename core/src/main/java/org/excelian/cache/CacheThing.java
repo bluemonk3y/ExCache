@@ -60,7 +60,7 @@ public class CacheThing<K,V> implements ExCache<K,V>  {
     @Override
     public void put(K k, V v) {
         createMaybe(k);
-        fwdCache.put(k, v);
+        fwdCache.invalidate(k);
         cacheLoader.put(k, v);
     }
     @Override

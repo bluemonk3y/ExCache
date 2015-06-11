@@ -1,1 +1,1 @@
-include 'core', 'cassandra-ns', 'mongo-ns'
+include 'core', 'cassandra-ns', 'mongo-ns', 'core-observable'

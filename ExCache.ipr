@@ -33,8 +33,21 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/cassandra" />
+            <option value="$PROJECT_DIR$/cassandra-ns" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core-observable" />
+            <option value="$PROJECT_DIR$/mongo-ns" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="createEmptyContentRootDirectories" value="true" />
+        <option name="distributionType" value="LOCAL" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/core-observable" />
+        <option name="gradleHome" value="$PROJECT_DIR$/../gradle-2.4" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/core-observable" />
           </set>
         </option>
       </GradleProjectSettings>
@@ -190,6 +203,7 @@
       <module fileurl="file://$PROJECT_DIR$/ExCache.iml" filepath="$PROJECT_DIR$/ExCache.iml" />
       <module fileurl="file://$PROJECT_DIR$/cassandra-ns/cassandra-ns.iml" filepath="$PROJECT_DIR$/cassandra-ns/cassandra-ns.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core-observable/core-observable.iml" filepath="$PROJECT_DIR$/core-observable/core-observable.iml" />
       <module fileurl="file://$PROJECT_DIR$/mongo-ns/mongo-ns.iml" filepath="$PROJECT_DIR$/mongo-ns/mongo-ns.iml" />
     </modules>
   </component>
@@ -201,6 +215,7 @@
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
   </component>
   <component name="masterDetails">
     <states>

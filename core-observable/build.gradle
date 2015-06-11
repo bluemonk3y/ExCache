@@ -6,7 +6,7 @@ sourceCompatibility = 1.8
 version = '1.0'
 jar {
     manifest {
-        attributes 'Implementation-Title': 'Cache-Mongo',
+        attributes 'Implementation-Title': 'Cache-Observable',
                    'Implementation-Version': version
     }
 }
@@ -19,11 +19,10 @@ dependencies {
     compile project(':core')
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
     compile 'com.google.guava:guava:18.0'
-    compile 'org.mongodb:mongo-java-driver:3.0.2'
-    compile 'org.springframework.data:spring-data-mongodb:1.7.0.RELEASE'
+    compile 'org.mockito:mockito-all:1.10.19'
     testCompile group: 'junit', name: 'junit', version: '4.+'
-
 }
+
 test {
     systemProperties 'property': 'value'
 }
