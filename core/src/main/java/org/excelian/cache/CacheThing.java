@@ -8,24 +8,24 @@ import java.util.concurrent.ExecutionException;
 public class CacheThing<K,V> implements ExCache<K,V>  {
 
     private ForwardingCache<K, V> fwdCache;
-    private AbstractCacheLoader cacheLoader;
+    private ExCacheLoader cacheLoader;
 
     private String spec = "maximumSize=10000,weakKeys,softValues,expireAfterWrite=1d,expireAfterAccess=1d,recordStats";
 
     private LoadingCache<K, V> cache;
     private volatile boolean created;
 
-    public CacheThing(final AbstractCacheLoader cacheLoader, String... optionalSpec) {
+    public CacheThing(final ExCacheLoader cacheLoader, String... optionalSpec) {
         this.cacheLoader = cacheLoader;
         if (optionalSpec != null && optionalSpec.length > 0) this.spec = optionalSpec[0];
 
         bindToGuavaCache(cacheLoader);
     }
 
-    private void bindToGuavaCache(AbstractCacheLoader cacheHook) {
+    private void bindToGuavaCache(ExCacheLoader cacheHook) {
         cache = CacheBuilder.from(spec).
-                recordStats().removalListener(cacheHook).
-                build(cacheHook);
+                recordStats().removalListener((RemovalListener<K,V>) cacheHook).
+                build((CacheLoader<K,V>) cacheHook);
 
         fwdCache = new ForwardingCache<K, V>() {
             @Override
@@ -54,7 +54,7 @@ public class CacheThing<K,V> implements ExCache<K,V>  {
     public V get(final K k) throws ExecutionException {
         createMaybe(k);
         // a bit crappy - but the fwdrCache doesnt expose 'getOrLoad(K, Loader)'
-        return cache.getIfPresent(k);
+        return cache.getUnchecked(k);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class CacheThing<K,V> implements ExCache<K,V>  {
         fwdCache.invalidate(k);
     }
     @Override
-    public void invalidate() {
+    public void invalidateAll() {
         fwdCache.invalidateAll();
 
     }
@@ -90,7 +90,7 @@ public class CacheThing<K,V> implements ExCache<K,V>  {
     }
 
     @Override
-    public AbstractCacheLoader getCacheLoader() {
+    public ExCacheLoader getCacheLoader() {
         return cacheLoader;
     }
 }

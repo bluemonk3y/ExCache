@@ -16,10 +16,11 @@ public class CacheThingTest {
     private int removed;
     private RemovalNotification receivedNotification;
     private int put;
+    private CacheThing<String, String> cacheThing;
 
     @Test
     public void canCreate() throws ExecutionException {
-        CacheThing<String, String> cacheThing = new CacheThing<String, String>(fixture);
+
         String test = cacheThing.get("TEST1");
         test = cacheThing.get("TEST2");
         assertEquals(1, created);
@@ -28,26 +29,19 @@ public class CacheThingTest {
 
     @Test
     public void canReadThrough() throws ExecutionException {
-        CacheThing<String, String> cacheThing = new CacheThing<String, String>(fixture);
-
         String test = cacheThing.get("TEST");
         assertEquals(1, read);
         assertEquals("FIXTURE:loaded_TEST", test);
-
     }
 
     @Test
     public void canWriteThrough() throws ExecutionException {
-        CacheThing<String, String> cacheThing = new CacheThing<String, String>(fixture);
-
         cacheThing.put("TEST","VALUE");
         assertEquals(1, put);
 
     }
     @Test
     public void canRemove() throws ExecutionException {
-        CacheThing<String, String> cacheThing = new CacheThing<String, String>(fixture);
-
         cacheThing.put("TEST", "VALUE");
         cacheThing.remove("TEST");
         assertEquals(1, removed);
@@ -55,6 +49,7 @@ public class CacheThingTest {
     }
     @Before
     public void setUp() throws Exception {
+
         fixture = new AbstractCacheLoader<String, String, String>() {
             public String load(String key) throws Exception {
                 read++;
@@ -73,6 +68,8 @@ public class CacheThingTest {
             }
             public String getName() { return "myCache"; }
             public String getDriverSession() {  return "yay"; }
+            public void invalidateAll() {}
         };
+        cacheThing = new CacheThing<String, String>(fixture);
     }
 }

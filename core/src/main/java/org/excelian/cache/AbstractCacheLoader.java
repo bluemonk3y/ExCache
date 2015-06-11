@@ -7,31 +7,14 @@ import com.google.common.cache.RemovalNotification;
 
 /**
  * Created by neil.avery on 27/05/2015.
+ *
+ * NB: Unfortunately CacheLoader is not an interface.
  */
-abstract public class AbstractCacheLoader<K,V,D> extends CacheLoader<K,V> implements CacheListener<K,V>, RemovalListener<K,V> {
-
-    public void create(String name, K k) {
-    }
-
-    public void put(K k, V v) {
-    }
-
-    public void remove(K k) {
-    }
-
-    @Override
-    public V load(K key) throws Exception {
-        return null;
-    }
+abstract public class AbstractCacheLoader<K,V,D> extends CacheLoader<K,V> implements ExCacheLoader<K,V,D> {
 
     public void onRemoval(RemovalNotification<K, V> notification) {
         if (notification.getCause().equals(RemovalCause.EXPLICIT)) {
             this.remove(notification.getKey());
         }
     }
-    abstract public void close();
-
-    abstract public String getName();
-
-    abstract public D getDriverSession();
 }
